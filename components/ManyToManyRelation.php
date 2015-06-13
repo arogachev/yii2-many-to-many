@@ -155,7 +155,7 @@ class ManyToManyRelation extends Object
 
     public function fill()
     {
-        if (!$this->fillingRoute) {
+        if (!$this->fillingRoute || !Yii::$app->controller) {
             return;
         }
 
