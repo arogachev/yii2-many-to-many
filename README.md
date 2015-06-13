@@ -165,7 +165,6 @@ public function rules()
 Or use custom validator:
 
 ```php
-
 use arogachev\ManyToMany\validators\ManyToManyValidator;
 
 public function rules()
@@ -183,4 +182,20 @@ Add control to view for managing related list. Without extensions it can be done
 
 ```php
 <?= $form->field($model, 'users')->dropDownList(User::getList(), ['multiple' => true]) ?>
+```
+
+Example of `getList()` method contents (it need to be placed in `User` model):
+
+```php
+use yii\helpers\ArrayHelper;
+
+/**
+ * @return array
+ */
+public static function getList()
+{
+    $models = static::find()->orderBy('name')->all();
+
+    return ArrayHelper::map($models, 'id', 'name');
+}
 ```
