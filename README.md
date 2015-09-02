@@ -71,7 +71,7 @@ public function behaviors()
                     'table' => 'tests_to_users', // Name of the junction table
                     'ownAttribute' => 'test_id', // Name of the column in junction table that represents current model
                     'relatedModel' => User::className(), // Related model class
-                    'relatedAttribute' => 'user_id' // Name of the column in junction table that represents related model
+                    'relatedAttribute' => 'user_id', // Name of the column in junction table that represents related model
                     'fillingRoute' => 'tests/default/update', // Full route name (including module id if it's inside module) for auto filling editable attribute with existing data. You can also pass array of routes.
                 ],
             ],
