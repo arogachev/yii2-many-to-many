@@ -45,7 +45,7 @@ Simply add public property to your `ActiveRecord` model like this:
 /**
  * @var array
  */
-public $users = [];
+public $editableUsers = [];
 ```
 
 It will store primary keys of related records during update.
@@ -90,7 +90,7 @@ Using ```viaTable```:
 /**
  * @return \yii\db\ActiveQuery
  */
-public function getRelUsers()
+public function getUsers()
 {
     return $this->hasMany(User::className(), ['id' => 'user_id'])
         ->viaTable('tests_to_users', ['test_id' => 'id'])
@@ -104,7 +104,7 @@ Using ```via``` (requires additional model for junction table):
 /**
  * @return \yii\db\ActiveQuery
  */
-public function getRelTestUsers()
+public function getTestUsers()
 {
     return $this->hasMany(TestUser::className(), ['test_id' => 'id']);
 }
@@ -112,10 +112,10 @@ public function getRelTestUsers()
 /**
  * @return \yii\db\ActiveQuery
  */
-public function getRelUsers()
+public function getUsers()
 {
     return $this->hasMany(User::className(), ['id' => 'user_id'])
-        ->via('relTestUsers')
+        ->via('testUsers')
         ->orderBy('name');
 }
 ```
@@ -135,9 +135,9 @@ public function behaviors()
             'class' => ManyToManyBehavior::className(),
             'relations' => [
                 [
-                    'name' => 'relUsers',
+                    'name' => 'users',
                     // These are the same as in previous example
-                    'editableAttribute' => 'users',
+                    'editableAttribute' => 'editableUsers',
                     'fillingRoute' => 'tests/default/update',
                 ],
             ],
