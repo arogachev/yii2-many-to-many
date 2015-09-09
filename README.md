@@ -158,7 +158,7 @@ Either mark it as safe at least:
 ```php
 public function rules()
 {
-    ['users', 'safe'],
+    ['editableUsers', 'safe'],
 }
 ```
 
@@ -169,7 +169,7 @@ use arogachev\ManyToMany\validators\ManyToManyValidator;
 
 public function rules()
 {
-    ['users', ManyToManyValidator::className()],
+    ['editableUsers', ManyToManyValidator::className()],
 }
 ```
 
@@ -181,7 +181,7 @@ It can not be used without attaching `ManyToManyBehavior`.
 Add control to view for managing related list. Without extensions it can be done with multiple select:
 
 ```php
-<?= $form->field($model, 'users')->dropDownList(User::getList(), ['multiple' => true]) ?>
+<?= $form->field($model, 'editableUsers')->dropDownList(User::getList(), ['multiple' => true]) ?>
 ```
 
 Example of `getList()` method contents (it need to be placed in `User` model):
