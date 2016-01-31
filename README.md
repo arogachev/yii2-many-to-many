@@ -9,6 +9,7 @@ for Yii 2 framework.
 - [Attaching and configuring behavior](#attaching-and-configuring-behavior)
 - [Adding attribute as safe](#adding-attribute-as-safe)
 - [Adding control to view](#adding-control-to-view)
+- [Additional features](#additional-features)
 
 ## Installation
 
@@ -199,3 +200,15 @@ public static function getList()
     return ArrayHelper::map($models, 'id', 'name');
 }
 ```
+
+## Additional features
+
+You can get added and deleted primary keys of related models for specific relation like so:
+
+```php
+$addedPrimaryKeys = $model->getManyToManyRelation('tags')->getAddedPrimaryKeys();
+$deletedPrimaryKeys = $model->getManyToManyRelation('tags')->getDeletedPrimaryKeys();
+```
+
+Note that they are only available after the model was saved so you can access it after $model->save()` call
+or in `afterSave()` event handler.

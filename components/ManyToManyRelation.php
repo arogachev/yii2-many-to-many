@@ -106,15 +106,11 @@ class ManyToManyRelation extends Object
     }
 
     /**
-     * @param null|array $primaryKeys
      * @throws \yii\db\Exception
      */
-    public function insert($primaryKeys = null)
+    public function insert()
     {
-        if ($primaryKeys === null) {
-            $primaryKeys = $this->getEditableList();
-        }
-
+        $primaryKeys = $this->getAddedPrimaryKeys();
         if (!$primaryKeys) {
             return;
         }
@@ -133,16 +129,16 @@ class ManyToManyRelation extends Object
 
     public function update()
     {
-        $this->delete(array_diff($this->getRelatedList(), $this->getEditableList()));
-        $this->insert(array_diff($this->getEditableList(), $this->getRelatedList()));
+        $this->delete();
+        $this->insert();
     }
 
     /**
-     * @param array $primaryKeys
      * @throws \yii\db\Exception
      */
-    public function delete($primaryKeys)
+    public function delete()
     {
+        $primaryKeys = $this->getDeletedPrimaryKeys();
         if (!$primaryKeys) {
             return;
         }
@@ -162,6 +158,22 @@ class ManyToManyRelation extends Object
         if (in_array(Yii::$app->controller->route, $this->fillingRoute)) {
             $this->setEditableList($this->getRelatedList());
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAddedPrimaryKeys()
+    {
+        return array_diff($this->getEditableList(), $this->getRelatedList());
+    }
+
+    /**
+     * @return array
+     */
+    public function getDeletedPrimaryKeys()
+    {
+        return array_diff($this->getRelatedList(), $this->getEditableList());
     }
 
     /**

@@ -69,4 +69,19 @@ class ManyToManyBehavior extends Behavior
     {
         return $this->_relations;
     }
+
+    /**
+     * @param string $name
+     * @return ManyToManyRelation|null
+     */
+    public function getManyToManyRelation($name)
+    {
+        foreach ($this->_relations as $relation) {
+            if ($relation->name == $name) {
+                return $relation;
+            }
+        }
+
+        return null;
+    }
 }
