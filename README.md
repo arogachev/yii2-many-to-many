@@ -3,6 +3,11 @@
 Implementation of [Many-to-many relationship](http://en.wikipedia.org/wiki/Many-to-many_%28data_model%29)
 for Yii 2 framework.
 
+[![Latest Stable Version](https://poser.pugx.org/arogachev/yii2-many-to-many/v/stable)](https://packagist.org/packages/arogachev/yii2-many-to-many)
+[![Total Downloads](https://poser.pugx.org/arogachev/yii2-many-to-many/downloads)](https://packagist.org/packages/arogachev/yii2-many-to-many)
+[![Latest Unstable Version](https://poser.pugx.org/arogachev/yii2-many-to-many/v/unstable)](https://packagist.org/packages/arogachev/yii2-many-to-many)
+[![License](https://poser.pugx.org/arogachev/yii2-many-to-many/license)](https://packagist.org/packages/arogachev/yii2-many-to-many)
+
 - [Installation](#installation)
 - [Features](#features)
 - [Creating editable attribute](#creating-editable-attribute)
