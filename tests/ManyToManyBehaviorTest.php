@@ -5,6 +5,24 @@ namespace tests;
 class ManyToManyBehaviorTest extends DatabaseTestCase
 {
     /**
+     * Validation test
+     */
+    public function testValidation()
+    {
+        $test = $this->findTestModel(2);
+        $test->editableUsers = '1, 2';
+        $this->assertEquals(false, $test->save());
+        $this->assertEquals(['Editable Users must be a list.'], $test->getErrors('editableUsers'));
+
+        $test->editableUsers = [1, 10];
+        $this->assertEquals(false, $test->save());
+        $this->assertEquals(
+            ['There are nonexistent elements in Editable Users list.'],
+            $test->getErrors('editableUsers')
+        );
+    }
+
+    /**
      * Create test
      */
     public function testCreate()
@@ -61,5 +79,18 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
         $test->save();
 
         $this->assertTestsUsersEqual('delete');
+    }
+
+    /**
+     * Test added and deleted primary keys
+     */
+    public function testPrimaryKeysDiff()
+    {
+        $test = $this->findTestModel(1);
+        $test->editableUsers = [1, 3];
+        $test->save();
+
+        $this->assertEquals([3], $test->getManyToManyRelation('tests_users')->getAddedPrimaryKeys());
+        $this->assertEquals([2], $test->getManyToManyRelation('tests_users')->getDeletedPrimaryKeys());
     }
 }

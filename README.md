@@ -216,6 +216,8 @@ $addedPrimaryKeys = $model->getManyToManyRelation('tags')->getAddedPrimaryKeys()
 $deletedPrimaryKeys = $model->getManyToManyRelation('tags')->getDeletedPrimaryKeys();
 ```
 
+`tags` can be value of either `name` or `table` relation property specified in config.
+
 Note that they are only available after the model was saved so you can access it after `$model->save()` call
 or in `afterSave()` event handler.
 

@@ -3,6 +3,7 @@
 namespace tests\models;
 
 use arogachev\ManyToMany\behaviors\ManyToManyBehavior;
+use arogachev\ManyToMany\validators\ManyToManyValidator;
 use yii\db\ActiveRecord;
 
 /**
@@ -43,5 +44,15 @@ class Test extends ActiveRecord
     public static function tableName()
     {
         return 'tests';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            ['editableUsers', ManyToManyValidator::className()],
+        ];
     }
 }

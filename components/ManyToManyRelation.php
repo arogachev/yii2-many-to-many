@@ -165,7 +165,7 @@ class ManyToManyRelation extends Object
      */
     public function getAddedPrimaryKeys()
     {
-        return array_diff($this->getEditableList(), $this->getRelatedList());
+        return array_values(array_diff($this->getEditableList(), $this->getRelatedList()));
     }
 
     /**
@@ -173,7 +173,7 @@ class ManyToManyRelation extends Object
      */
     public function getDeletedPrimaryKeys()
     {
-        return array_diff($this->getRelatedList(), $this->getEditableList());
+        return array_values(array_diff($this->getRelatedList(), $this->getEditableList()));
     }
 
     /**

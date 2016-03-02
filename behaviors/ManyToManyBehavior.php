@@ -77,7 +77,7 @@ class ManyToManyBehavior extends Behavior
     public function getManyToManyRelation($name)
     {
         foreach ($this->_relations as $relation) {
-            if ($relation->name == $name) {
+            if ($relation->name == $name || $relation->table == $name) {
                 return $relation;
             }
         }
