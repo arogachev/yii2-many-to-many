@@ -221,7 +221,7 @@ $deletedPrimaryKeys = $model->getManyToManyRelation('tags')->getDeletedPrimaryKe
 Note that they are only available after the model was saved so you can access it after `$model->save()` call
 or in `afterSave()` event handler.
 
-# Running tests
+## Running tests
 
 Install dependencies:
 
