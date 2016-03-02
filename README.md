@@ -73,7 +73,7 @@ public function behaviors()
             'class' => ManyToManyBehavior::className(),
             'relations' => [
                 [
-                    'editableAttribute' => 'users', // Editable attribute name
+                    'editableAttribute' => 'editableUsers', // Editable attribute name
                     'table' => 'tests_to_users', // Name of the junction table
                     'ownAttribute' => 'test_id', // Name of the column in junction table that represents current model
                     'relatedModel' => User::className(), // Related model class
