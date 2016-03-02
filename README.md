@@ -15,6 +15,7 @@ for Yii 2 framework.
 - [Adding attribute as safe](#adding-attribute-as-safe)
 - [Adding control to view](#adding-control-to-view)
 - [Additional features](#additional-features)
+- [Running tests](#running-tests)
 
 ## Installation
 
@@ -217,3 +218,33 @@ $deletedPrimaryKeys = $model->getManyToManyRelation('tags')->getDeletedPrimaryKe
 
 Note that they are only available after the model was saved so you can access it after `$model->save()` call
 or in `afterSave()` event handler.
+
+# Running tests
+
+Install dependencies:
+
+```
+composer install
+```
+
+Add database config (`tests/config/db-local.php` file) with following contents:
+
+```php
+<?php
+
+return [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=yii2_many_to_many',
+    'username' => 'root',
+    'password' => '',
+];
+```
+
+You can change `dbname`, `username` and `password` how you want. Make sure create database and user before running
+tests.
+
+Run tests:
+
+```
+vendor/bin/phpunit
+```
