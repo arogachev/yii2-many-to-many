@@ -1,0 +1,27 @@
+users:
+  -
+    id: 1
+    name: "Ivan Ivanov"
+  -
+    id: 2
+    name: "Petr Petrov"
+  -
+    id: 3
+    name: "Pavel Pavlov"
+tests:
+  -
+    id: 1
+    name: "Common Test"
+  -
+    id: 2
+    name: "Programming Test"
+  -
+    id: 3
+    name: "Psychological Test"
+tests_users:
+  -
+    test_id: 1
+    user_id: 1
+  -
+    test_id: 1
+    user_id: 2
