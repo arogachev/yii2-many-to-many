@@ -32,7 +32,7 @@ class ManyToManyValidator extends Validator
         $label = $model->getAttributeLabel($attribute);
 
         if (!is_array($model->$attribute)) {
-            $model->addError($attribute, Yii::t('many-to-many', '{attribute} must be an array.', [
+            $model->addError($attribute, Yii::t('many-to-many', '{attribute} must be a list.', [
                 'attribute' => $label,
             ]));
 
