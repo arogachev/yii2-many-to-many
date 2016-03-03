@@ -31,7 +31,7 @@ php composer.phar require --prefer-dist arogachev/yii2-many-to-many
 or add
 
 ```
-"arogachev/yii2-many-to-many": "*"
+"arogachev/yii2-many-to-many": "0.2.*"
 ```
 
 to the require section of your `composer.json` file.
