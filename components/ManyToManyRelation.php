@@ -21,11 +21,6 @@ class ManyToManyRelation extends Object
     public $editableAttribute;
 
     /**
-     * @var string|array
-     */
-    public $fillingRoute;
-
-    /**
      * @var string
      */
     public $table;
@@ -44,6 +39,11 @@ class ManyToManyRelation extends Object
      * @var string
      */
     public $relatedAttribute;
+
+    /**
+     * @var boolean|callable
+     */
+    public $autoFill = true;
 
     /**
      * @var \yii\db\ActiveRecord
@@ -100,8 +100,6 @@ class ManyToManyRelation extends Object
             }
         }
 
-        $this->fillingRoute = (array) $this->fillingRoute;
-
         parent::init();
     }
 
@@ -149,15 +147,22 @@ class ManyToManyRelation extends Object
         ])->execute();
     }
 
-    public function fill()
+    public function autoFill()
     {
-        if (!$this->fillingRoute || !Yii::$app->controller) {
+        if (is_callable($this->autoFill) && !call_user_func($this->autoFill, $this->_model)) {
             return;
         }
 
-        if (in_array(Yii::$app->controller->route, $this->fillingRoute)) {
-            $this->setEditableList($this->getRelatedList());
+        if (!$this->autoFill) {
+            return;
         }
+
+        $this->fill();
+    }
+
+    public function fill()
+    {
+        $this->setEditableList($this->getRelatedList());
     }
 
     /**

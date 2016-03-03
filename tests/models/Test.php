@@ -18,6 +18,11 @@ class Test extends ActiveRecord
     public $editableUsers = [];
 
     /**
+     * @var array
+     */
+    public static $additionalUsersRelationConfig = [];
+
+    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -26,13 +31,16 @@ class Test extends ActiveRecord
             [
                 'class' => ManyToManyBehavior::className(),
                 'relations' => [
-                    [
-                        'editableAttribute' => 'editableUsers',
-                        'table' => 'tests_users',
-                        'ownAttribute' => 'test_id',
-                        'relatedModel' => User::className(),
-                        'relatedAttribute' => 'user_id',
-                    ],
+                    array_merge(
+                        [
+                            'editableAttribute' => 'editableUsers',
+                            'table' => 'tests_users',
+                            'ownAttribute' => 'test_id',
+                            'relatedModel' => User::className(),
+                            'relatedAttribute' => 'user_id',
+                        ],
+                        self::$additionalUsersRelationConfig
+                    ),
                 ],
             ],
         ];
@@ -54,5 +62,15 @@ class Test extends ActiveRecord
         return [
             ['editableUsers', ManyToManyValidator::className()],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        self::$additionalUsersRelationConfig = [];
     }
 }

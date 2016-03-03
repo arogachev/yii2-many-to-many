@@ -2,6 +2,8 @@
 
 namespace tests;
 
+use tests\models\Test;
+
 class ManyToManyBehaviorTest extends DatabaseTestCase
 {
     /**
@@ -27,10 +29,23 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
      */
     public function testCreate()
     {
+        $test = new Test;
+        $test->name = 'Job Test';
+        $test->editableUsers = [1, 2];
+        $test->save();
+        $this->assertTestsEqual('create');
+        $this->assertTestsUsersEqual('create');
+    }
+
+    /**
+     * Update (create) test
+     */
+    public function testUpdateCreate()
+    {
         $test = $this->findTestModel(2);
         $test->editableUsers = [1, 2];
         $test->save();
-        $this->assertTestsUsersEqual('create');
+        $this->assertTestsUsersEqual('update-create');
     }
 
     /**
@@ -79,6 +94,35 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
         $test->save();
 
         $this->assertTestsUsersEqual('delete');
+    }
+
+    /**
+     * Auto fill test
+     */
+    public function testAutoFill()
+    {
+        $test = $this->findTestModel(1);
+        $this->assertEquals([1, 2], $test->editableUsers);
+
+        $test = $this->findTestModel(1, ['autoFill' => false]);
+        $this->assertEquals([], $test->editableUsers);
+
+        $test = $this->findTestModel(1, ['autoFill' => function ($model) {
+            return true;
+        }]);
+        $this->assertEquals([1, 2], $test->editableUsers);
+    }
+
+    /**
+     * Fill test
+     */
+    public function testFill()
+    {
+        $test = $this->findTestModel(1, ['autoFill' => false]);
+        $this->assertEquals([], $test->editableUsers);
+
+        $test->getManyToManyRelation('tests_users')->fill();
+        $this->assertEquals([1, 2], $test->editableUsers);
     }
 
     /**

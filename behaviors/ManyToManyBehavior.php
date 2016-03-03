@@ -44,7 +44,7 @@ class ManyToManyBehavior extends Behavior
     public function afterFind()
     {
         foreach ($this->_relations as $relation) {
-            $relation->fill();
+            $relation->autoFill();
         }
     }
 

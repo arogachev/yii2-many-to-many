@@ -47,15 +47,32 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
 
     /**
      * @param integer $id
-     * @return Test
+     * @param array $additionalUsersRelationConfig
+     * @return Test|\arogachev\ManyToMany\behaviors\ManyToManyBehavior
      */
-    protected function findTestModel($id)
+    protected function findTestModel($id, $additionalUsersRelationConfig = [])
     {
+        Test::$additionalUsersRelationConfig = $additionalUsersRelationConfig;
+
         return Test::findOne($id);
     }
 
     /**
-     * Check if tests-users junctions tables are equal
+     * Check if tests tables are equal
+     * @param string $dataSetName
+     */
+    protected function assertTestsEqual($dataSetName)
+    {
+        $dataSet = $this->getYamlDataSet($dataSetName);
+        $testsTable = $this->getConnection()->createQueryTable(
+            'tests',
+            'SELECT * FROM `tests` ORDER BY `id`'
+        );
+        $this->assertTablesEqual($dataSet->getTable('tests'), $testsTable);
+    }
+
+    /**
+     * Check if tests-users many-to-many tables are equal
      * @param string $dataSetName
      */
     protected function assertTestsUsersEqual($dataSetName)

@@ -12,6 +12,7 @@ for Yii 2 framework.
 - [Features](#features)
 - [Creating editable attribute](#creating-editable-attribute)
 - [Attaching and configuring behavior](#attaching-and-configuring-behavior)
+- [Auto filling](#auto-filling)
 - [Adding attribute as safe](#adding-attribute-as-safe)
 - [Adding control to view](#adding-control-to-view)
 - [Additional features](#additional-features)
@@ -41,7 +42,7 @@ to the require section of your `composer.json` file.
 - Multiple relations
 - No extra queries. For example, if initially model has 100 related records,
 after adding just one, exactly one row will be inserted. If nothing was changed, no queries will be executed.
-- Auto filling of editable attribute for given route(s)
+- Auto filling of editable attribute
 - Validator for checking if the received list is valid
 
 ## Creating editable attribute
@@ -79,7 +80,6 @@ public function behaviors()
                     'ownAttribute' => 'test_id', // Name of the column in junction table that represents current model
                     'relatedModel' => User::className(), // Related model class
                     'relatedAttribute' => 'user_id', // Name of the column in junction table that represents related model
-                    'fillingRoute' => 'tests/default/update', // Full route name (including module id if it's inside module) for auto filling editable attribute with existing data. You can also pass array of routes.
                 ],
             ],
         ],
@@ -145,7 +145,6 @@ public function behaviors()
                     'name' => 'users',
                     // These are the same as in previous example
                     'editableAttribute' => 'editableUsers',
-                    'fillingRoute' => 'tests/default/update',
                 ],
             ],
         ],
@@ -155,6 +154,43 @@ public function behaviors()
 
 Additional many-to-many relations can be added exactly the same.
 Note that even for one relation you should declare it as a part of `relations` section.
+
+## Auto filling
+
+By default, `editableAttribute` of each found model will be populated with ids of related models (eager loading is
+used). If you want more manual control, prevent extra queries, disable `autoFill` option:
+
+```php
+'autoFill' => false,
+```
+
+and fill it only when it's needed, for example in `update` action of controller:
+
+```php
+$model = $this->findModel($id);
+$model->getManyToManyRelation('users')->fill();
+```
+
+**Note:** If you disable `autoFill` and don't add this, all relations of that model in many-to-many table will be lost
+after update!
+
+Alternatively you can specify conditions of filling in closure:
+
+```php
+`autoFill` => function ($model) {
+    return $model->scenario == Test::SCENARIO_UPDATE; // boolean value
+}
+```
+
+Even it's possible to do something like this:
+
+```php
+`autoFill` => function ($model) {
+    return Yii::$app->controller->route == 'tests/default/update';
+}
+```
+
+but it's not recommended for usage because model is not appropriate place for handling routes.
 
 ## Adding attribute as safe
 
@@ -207,16 +243,28 @@ public static function getList()
 }
 ```
 
-## Additional features
+## Relation features
+
+You can access many-to-many relation like so:
+
+```php
+$relation = $model->getManyToManyRelation('users');
+```
+
+`users` can be value of either `name` or `table` relation property specified in config.
+
+You can fill `editableAttribute` with ids of related records like so:
+
+```php
+$model->getManyToManyRelation('users')->fill();
+```
 
 You can get added and deleted primary keys of related models for specific relation like so:
 
 ```php
-$addedPrimaryKeys = $model->getManyToManyRelation('tags')->getAddedPrimaryKeys();
-$deletedPrimaryKeys = $model->getManyToManyRelation('tags')->getDeletedPrimaryKeys();
+$addedPrimaryKeys = $model->getManyToManyRelation('users')->getAddedPrimaryKeys();
+$deletedPrimaryKeys = $model->getManyToManyRelation('users')->getDeletedPrimaryKeys();
 ```
-
-`tags` can be value of either `name` or `table` relation property specified in config.
 
 Note that they are only available after the model was saved so you can access it after `$model->save()` call
 or in `afterSave()` event handler.
