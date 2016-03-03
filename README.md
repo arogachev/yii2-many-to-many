@@ -143,7 +143,7 @@ public function behaviors()
             'relations' => [
                 [
                     'name' => 'users',
-                    // These are the same as in previous example
+                    // This is the same as in previous example
                     'editableAttribute' => 'editableUsers',
                 ],
             ],
