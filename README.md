@@ -15,7 +15,7 @@ for Yii 2 framework.
 - [Auto filling](#auto-filling)
 - [Adding attribute as safe](#adding-attribute-as-safe)
 - [Adding control to view](#adding-control-to-view)
-- [Additional features](#additional-features)
+- [Relation features](#relation-features)
 - [Running tests](#running-tests)
 
 ## Installation
