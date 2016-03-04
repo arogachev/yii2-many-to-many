@@ -44,44 +44,4 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     {
         return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__FILE__) . "/data/$name.yml");
     }
-
-    /**
-     * @param integer $id
-     * @param array $additionalUsersRelationConfig
-     * @return Test|\arogachev\ManyToMany\behaviors\ManyToManyBehavior
-     */
-    protected function findTestModel($id, $additionalUsersRelationConfig = [])
-    {
-        Test::$additionalUsersRelationConfig = $additionalUsersRelationConfig;
-
-        return Test::findOne($id);
-    }
-
-    /**
-     * Check if tests tables are equal
-     * @param string $dataSetName
-     */
-    protected function assertTestsEqual($dataSetName)
-    {
-        $dataSet = $this->getYamlDataSet($dataSetName);
-        $testsTable = $this->getConnection()->createQueryTable(
-            'tests',
-            'SELECT * FROM `tests` ORDER BY `id`'
-        );
-        $this->assertTablesEqual($dataSet->getTable('tests'), $testsTable);
-    }
-
-    /**
-     * Check if tests-users many-to-many tables are equal
-     * @param string $dataSetName
-     */
-    protected function assertTestsUsersEqual($dataSetName)
-    {
-        $dataSet = $this->getYamlDataSet($dataSetName);
-        $testsUsersTable = $this->getConnection()->createQueryTable(
-            'tests_users',
-            'SELECT * FROM `tests_users` ORDER BY `test_id`, `user_id`'
-        );
-        $this->assertTablesEqual($dataSet->getTable('tests_users'), $testsUsersTable);
-    }
 }

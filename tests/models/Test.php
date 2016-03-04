@@ -9,6 +9,9 @@ use yii\db\ActiveRecord;
 /**
  * @property integer $id
  * @property string $name
+ *
+ * @property User[] $usersViaTable
+ * @property User[] $usersViaRelation
  */
 class Test extends ActiveRecord
 {
@@ -28,7 +31,7 @@ class Test extends ActiveRecord
     public function behaviors()
     {
         return [
-            [
+            'manyToMany' => [
                 'class' => ManyToManyBehavior::className(),
                 'relations' => [
                     array_merge(
@@ -62,6 +65,32 @@ class Test extends ActiveRecord
         return [
             ['editableUsers', ManyToManyValidator::className()],
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersViaTable()
+    {
+        return $this->hasMany(User::className(), ['id' => 'user_id'])
+            ->viaTable('tests_users', ['test_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTestUsers()
+    {
+        return $this->hasMany(TestUser::className(), ['test_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersViaRelation()
+    {
+        return $this->hasMany(User::className(), ['id' => 'user_id'])
+            ->via('testUsers');
     }
 
     /**
