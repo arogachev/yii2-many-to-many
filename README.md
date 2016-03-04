@@ -12,7 +12,8 @@ for Yii 2 framework.
 - [Features](#features)
 - [Creating editable attribute](#creating-editable-attribute)
 - [Attaching and configuring behavior](#attaching-and-configuring-behavior)
-- [Auto filling](#auto-filling)
+- [Filling relations](#filling-relations)
+- [Saving relations without massive assignment](#saving-relations-without-massive-assignment)
 - [Adding attribute as safe](#adding-attribute-as-safe)
 - [Adding control to view](#adding-control-to-view)
 - [Relation features](#relation-features)
@@ -155,7 +156,7 @@ public function behaviors()
 Additional many-to-many relations can be added exactly the same.
 Note that even for one relation you should declare it as a part of `relations` section.
 
-## Auto filling
+## Filling relations
 
 By default, `editableAttribute` of each found model will be populated with ids of related models (eager loading is
 used). If you want more manual control, prevent extra queries, disable `autoFill` option:
@@ -164,15 +165,16 @@ used). If you want more manual control, prevent extra queries, disable `autoFill
 'autoFill' => false,
 ```
 
-and fill it only when it's needed, for example in `update` action of controller:
+and fill it only when it's needed, for example in `update` action of controller. This is recommended way of using.
 
 ```php
-$model = $this->findModel($id);
-$model->getManyToManyRelation('users')->fill();
+public function actionUpdate($id)
+{
+    $model = $this->findModel($id);
+    $model->getManyToManyRelation('users')->fill();
+    // ...
+}
 ```
-
-**Note:** If you disable `autoFill` and don't add this, all relations of that model in many-to-many table will be lost
-after update!
 
 Alternatively you can specify conditions of filling in closure:
 
@@ -191,6 +193,44 @@ Even it's possible to do something like this:
 ```
 
 but it's not recommended for usage because model is not appropriate place for handling routes.
+
+## Saving relations without massive assignment
+
+When creating model:
+
+```php
+$model = new Test;
+$model->editableUsers = [1, 2];
+$model->save();
+```
+
+When updating model (`'autoFill' => true`):
+
+```php
+$model = new Test;
+$model->editableUsers = [1, 2];
+$model->save();
+```
+
+When updating model (`'autoFill' => false`, manual filling):
+
+```php
+$model = new Test;
+$model->getManyToManyRelation('users')->fill();
+var_dump($model->editableUsers) // [1, 2]
+$model->editableUsers = [1, 2, 3];
+$model->save();
+```
+
+When updating model (`'autoFill' => false`, without manual filling):
+
+```php
+$model = new Test;
+var_dump($model->editableUsers) // empty array
+$model->save();
+```
+
+In this case many-to-many relations will stay untouched.
 
 ## Adding attribute as safe
 

@@ -55,6 +55,11 @@ class ManyToManyRelation extends Object
      */
     protected $_relatedList;
 
+    /**
+     * @var boolean
+     */
+    protected $_filled = false;
+
 
     /**
      * @inheritdoc
@@ -127,6 +132,10 @@ class ManyToManyRelation extends Object
 
     public function update()
     {
+        if (!$this->_filled) {
+            return;
+        }
+
         $this->delete();
         $this->insert();
     }
@@ -163,6 +172,7 @@ class ManyToManyRelation extends Object
     public function fill()
     {
         $this->setEditableList($this->getRelatedList());
+        $this->_filled = true;
     }
 
     /**

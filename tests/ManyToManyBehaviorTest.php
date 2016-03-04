@@ -10,6 +10,7 @@ use tests\models\User;
  * These tests use 3 config variations:
  * @see ManyToManyBehaviorTest::testValidate()
  * @see ManyToManyBehaviorTest::testCreate()
+ * @see ManyToManyBehaviorTest::testUpdateNotFilled()
  * @see ManyToManyBehaviorTest::testUpdateCreate()
  * @see ManyToManyBehaviorTest::testUpdateAdd()
  * @see ManyToManyBehaviorTest::testUpdateDelete()
@@ -107,6 +108,40 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
         $test = new Test;
         $test = $this->useRelationViaRelation($test);
         $this->testCreate($test);
+    }
+
+    /**
+     * Update not filled test
+     * @param Test|null $test
+     */
+    public function testUpdateNotFilled($test = null)
+    {
+        $test = $test ? $test : $this->findTestModel(1, ['autoFill' => false]);
+        $test->editableUsers = [];
+        $test->save();
+        $this->assertTestsUsersEqual('initial');
+    }
+
+    /**
+     * Update not filled test using relation via table
+     */
+    public function testUpdateNotFilledUsingRelationViaTable()
+    {
+        $additionalConfig = ['autoFill' => false];
+        $test = $this->findTestModel(1, $additionalConfig);
+        $test = $this->useRelationViaTable($test, $additionalConfig);
+        $this->testUpdateNotFilled($test);
+    }
+
+    /**
+     * Update not filled test using relation via relation
+     */
+    public function testUpdateNotFilledUsingRelationViaRelation()
+    {
+        $additionalConfig = ['autoFill' => false];
+        $test = $this->findTestModel(1, $additionalConfig);
+        $test = $this->useRelationViaRelation($test, $additionalConfig);
+        $this->testUpdateNotFilled($test);
     }
 
     /**
@@ -329,8 +364,9 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
      */
     public function testFillUsingRelationViaTable()
     {
-        $test = $this->findTestModel(1, ['autoFill' => false]);
-        $test = $this->useRelationViaTable($test);
+        $additionalConfig = ['autoFill' => false];
+        $test = $this->findTestModel(1, $additionalConfig);
+        $test = $this->useRelationViaTable($test, $additionalConfig);
         $this->testFill($test);
     }
 
@@ -339,8 +375,9 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
      */
     public function testFillUsingRelationViaRelation()
     {
-        $test = $this->findTestModel(1, ['autoFill' => false]);
-        $test = $this->useRelationViaRelation($test);
+        $additionalConfig = ['autoFill' => false];
+        $test = $this->findTestModel(1, $additionalConfig);
+        $test = $this->useRelationViaRelation($test, $additionalConfig);
         $this->testFill($test);
     }
 
@@ -394,20 +431,27 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
     /**
      * Use alternative config - relation via table
      * @param Test|\arogachev\ManyToMany\behaviors\ManyToManyBehavior $test
+     * @param array $additionalUsersRelationConfig
      * @return Test|\arogachev\ManyToMany\behaviors\ManyToManyBehavior
      */
-    protected function useRelationViaTable($test)
+    protected function useRelationViaTable($test, $additionalUsersRelationConfig = [])
     {
         $test->attachBehavior('manyToMany', [
             'class' => ManyToManyBehavior::className(),
             'relations' => [
-                [
-                    'name' => 'usersViaTable',
-                    'editableAttribute' => 'editableUsers',
-                ],
+                array_merge(
+                    [
+                        'name' => 'usersViaTable',
+                        'editableAttribute' => 'editableUsers',
+                    ],
+                    $additionalUsersRelationConfig
+                ),
             ]
         ]);
         $test->customInit();
+        if (!$test->isNewRecord) {
+            $test->afterFind();
+        }
 
         return $test;
     }
@@ -415,20 +459,27 @@ class ManyToManyBehaviorTest extends DatabaseTestCase
     /**
      * Use alternative config - relation via relation
      * @param Test|\arogachev\ManyToMany\behaviors\ManyToManyBehavior $test
+     * @param array $additionalUsersRelationConfig
      * @return Test|\arogachev\ManyToMany\behaviors\ManyToManyBehavior
      */
-    protected function useRelationViaRelation($test)
+    protected function useRelationViaRelation($test, $additionalUsersRelationConfig = [])
     {
         $test->attachBehavior('manyToMany', [
             'class' => ManyToManyBehavior::className(),
             'relations' => [
-                [
-                    'name' => 'usersViaRelation',
-                    'editableAttribute' => 'editableUsers',
-                ],
+                array_merge(
+                    [
+                        'name' => 'usersViaRelation',
+                        'editableAttribute' => 'editableUsers',
+                    ],
+                    $additionalUsersRelationConfig
+                ),
             ]
         ]);
         $test->customInit();
+        if (!$test->isNewRecord) {
+            $test->afterFind();
+        }
 
         return $test;
     }
