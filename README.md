@@ -267,7 +267,7 @@ Add control to view for managing related list. Without extensions it can be done
 <?= $form->field($model, 'editableUsers')->dropDownList(User::getList(), ['multiple' => true]) ?>
 ```
 
-Example of `getList()` method contents (it need to be placed in `User` model):
+Example of `getList()` method contents (it needs to be placed in `User` model):
 
 ```php
 use yii\helpers\ArrayHelper;
