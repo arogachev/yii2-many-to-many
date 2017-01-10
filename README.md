@@ -179,7 +179,7 @@ public function actionUpdate($id)
 Alternatively you can specify conditions of filling in closure:
 
 ```php
-`autoFill` => function ($model) {
+'autoFill' => function ($model) {
     return $model->scenario == Test::SCENARIO_UPDATE; // boolean value
 }
 ```
@@ -187,7 +187,7 @@ Alternatively you can specify conditions of filling in closure:
 Even it's possible to do something like this:
 
 ```php
-`autoFill` => function ($model) {
+'autoFill' => function ($model) {
     return Yii::$app->controller->route == 'tests/default/update';
 }
 ```
