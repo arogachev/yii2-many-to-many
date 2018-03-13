@@ -3,8 +3,8 @@
 namespace arogachev\ManyToMany\components;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\base\BaseObject;
+use yii\base\InvalidConfigException;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
