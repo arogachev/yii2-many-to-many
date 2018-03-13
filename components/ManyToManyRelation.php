@@ -4,11 +4,11 @@ namespace arogachev\ManyToMany\components;
 
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
-class ManyToManyRelation extends Object
+class ManyToManyRelation extends BaseObject
 {
     /**
      * @var string
