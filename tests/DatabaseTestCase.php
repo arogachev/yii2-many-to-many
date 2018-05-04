@@ -2,12 +2,11 @@
 
 namespace tests;
 
-use PHPUnit_Extensions_Database_DataSet_YamlDataSet;
-use PHPUnit_Extensions_Database_TestCase;
-use tests\models\Test;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use PHPUnit\DbUnit\TestCase;
 use Yii;
 
-abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
+abstract class DatabaseTestCase extends TestCase
 {
     /**
      * @inheritdoc
@@ -38,10 +37,10 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     /**
      * Get data set from file in .yml format
      * @param string $name Data set name (file name without extension)
-     * @return PHPUnit_Extensions_Database_DataSet_YamlDataSet
+     * @return YamlDataSet
      */
     protected function getYamlDataSet($name)
     {
-        return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__FILE__) . "/data/$name.yml");
+        return new YamlDataSet(dirname(__FILE__) . "/data/$name.yml");
     }
 }
